@@ -6,7 +6,6 @@ A simple Node.js API application with health check and environment-aware endpoin
 
 - ✅ Health check endpoint (`/health`)
 - ✅ Home endpoint (`/`) with environment information
-- ✅ Multi-stage optimized Dockerfile
 - ✅ Docker Compose configuration
 - ✅ Comprehensive test suite
 - ✅ Environment configuration support
@@ -25,7 +24,7 @@ A simple Node.js API application with health check and environment-aware endpoin
    yarn install
    ```
 
-3. Copy environment file:
+3. Create environment file:
    ```bash
    cp .env .env.local
    ```
@@ -107,47 +106,7 @@ docker run -p 3000:3000 -e APP_ENV=prod atm-blue-node
 
 ```bash
 # Development environment
-docker-compose --profile dev up
-
-# Production environment
-docker-compose --profile prod up
-
-# Local environment
-docker-compose --profile local up
-```
-
-### Available Profiles
-
-- `dev`: Development environment with hot reload
-- `prod`: Production-optimized environment
-- `local`: Local testing environment (port 3001)
-
-## Docker Multi-Stage Build
-
-The Dockerfile uses multi-stage builds for optimization:
-
-1. **Base**: Sets up the foundation with Node.js Alpine
-2. **Deps**: Installs production dependencies
-3. **Dev**: Development image with all dependencies and hot reload
-4. **Build**: Build stage for any compilation needs
-5. **Production**: Optimized production image with minimal footprint
-
-## Project Structure
-
-```
-atm-blue-node/
-├── src/
-│   └── app.js              # Main application file
-├── tests/
-│   └── app.test.js         # Test suite
-├── .env                    # Environment variables
-├── .gitignore             # Git ignore rules
-├── .dockerignore          # Docker ignore rules
-├── Dockerfile             # Multi-stage Docker configuration
-├── docker-compose.yml     # Docker Compose configuration
-├── jest.config.js         # Jest testing configuration
-├── package.json           # Node.js dependencies and scripts
-└── README.md              # This file
+docker-compose up
 ```
 
 ## API Testing
