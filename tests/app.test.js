@@ -62,4 +62,13 @@ describe('API Endpoints', () => {
       expect(response.body).toHaveProperty('message', 'Route not found');
     });
   });
+
+  describe('test 1+2', () => {
+    it('should return 404 for non-existent routes', async () => {
+     const a = 1;
+     const b = 2;
+     const sum = a + b;
+     expect(sum).toBe(4);
+    });
+  });
 });
