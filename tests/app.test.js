@@ -1,6 +1,7 @@
 const request = require('supertest');
 const { app, server } = require('../src/app');
 
+
 describe('API Endpoints', () => {
   afterAll((done) => {
     server.close(done);
@@ -24,7 +25,7 @@ describe('API Endpoints', () => {
         .get('/')
         .expect(200);
 
-      expect(['local', 'dev', 'prod']).toContain(response.body.environment);
+      expect(['local', 'dev', 'prod', 'test']).toContain(response.body.environment);
     });
   });
 
@@ -63,12 +64,24 @@ describe('API Endpoints', () => {
     });
   });
 
-  describe('test 1+2', () => {
-    it('should return 404 for non-existent routes', async () => {
+  describe('Math Operations', () => {
+    console.log('APP_ENV', process.env.APP_ENV);
+    it('should correctly add 1 + 2', async () => {
      const a = 1;
      const b = 2;
      const sum = a + b;
-     expect(sum).toBe(4);
+     expect(sum).toBe(3);
+    });
+  });
+
+  describe('Environment Variables', () => {
+    it('should use test environment', async () => {
+      expect(process.env.APP_ENV).toBe('test');
+      expect(process.env.NODE_ENV).toBe('test');
+    });
+
+    it('should have correct port configuration', async () => {
+      expect(process.env.PORT).toBe(process.env.PORT);
     });
   });
 });

@@ -1,0 +1,33 @@
+name: Pre Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup test environment
+      run: cp test.env .env
+
+    - name: Build Docker image
+      run: docker build -t atm-blue-node:test .
+
+    - name: Run tests in container
+      id: test
+      run: |
+        docker run --rm \
+          atm-blue-node:test \
+          sh -c "yarn install --dev && yarn test"
+      continue-on-error: true
+
+    - name: Fail job if tests failed
+      if: steps.test.outcome == 'failure'
+      run: exit 1
