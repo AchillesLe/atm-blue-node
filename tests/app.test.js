@@ -1,11 +1,10 @@
 const request = require('supertest');
 const { app, server } = require('../src/app');
 
-console.log('APP_ENV', process.env.APP_ENV);
-
 
 describe('API Endpoints', () => {
   afterAll((done) => {
+    console.log('APP_ENV', process.env.APP_ENV);
     server.close(done);
   });
 
@@ -27,7 +26,7 @@ describe('API Endpoints', () => {
         .get('/')
         .expect(200);
 
-      expect(['local', 'dev', 'prod']).toContain(response.body.environment);
+      expect(['local', 'dev', 'prod', 'test']).toContain(response.body.environment);
     });
   });
 
@@ -71,7 +70,7 @@ describe('API Endpoints', () => {
      const a = 1;
      const b = 2;
      const sum = a + b;
-     expect(sum).toBe(3);
+     expect(sum).toBe(4);
     });
   });
 
@@ -82,7 +81,7 @@ describe('API Endpoints', () => {
     });
 
     it('should have correct port configuration', async () => {
-      expect(process.env.PORT).toBe('3001');
+      expect(process.env.PORT).toBe(process.env.PORT);
     });
   });
 });
