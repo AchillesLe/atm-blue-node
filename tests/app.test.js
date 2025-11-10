@@ -4,7 +4,6 @@ const { app, server } = require('../src/app');
 
 describe('API Endpoints', () => {
   afterAll((done) => {
-    console.log('APP_ENV', process.env.APP_ENV);
     server.close(done);
   });
 
@@ -66,11 +65,12 @@ describe('API Endpoints', () => {
   });
 
   describe('Math Operations', () => {
+    console.log('APP_ENV', process.env.APP_ENV);
     it('should correctly add 1 + 2', async () => {
      const a = 1;
      const b = 2;
      const sum = a + b;
-     expect(sum).toBe(4);
+     expect(sum).toBe(3);
     });
   });
 
