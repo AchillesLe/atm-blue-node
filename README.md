@@ -1,5 +1,7 @@
 # ATM Blue Node API
 
+![Simple Test](https://github.com/AchillesLe/atm-blue-node/workflows/Simple%20Test/badge.svg)
+
 A simple Node.js API application with health check and environment-aware endpoints.
 
 ## Features
@@ -7,8 +9,9 @@ A simple Node.js API application with health check and environment-aware endpoin
 - ✅ Health check endpoint (`/health`)
 - ✅ Home endpoint (`/`) with environment information
 - ✅ Docker Compose configuration
-- ✅ Comprehensive test suite
+- ✅ Test suite with Jest
 - ✅ Environment configuration support
+- ✅ **Simple GitHub Actions CI/CD** - runs tests when you merge to main
 
 ## Requirements
 
@@ -81,14 +84,26 @@ Returns application health status.
 
 ```bash
 # Run tests
-yarn test
+npm test
 
 # Run tests in watch mode
-yarn test:watch
+npm run test:watch
 
 # Run tests with coverage
-yarn test:coverage
+npm run test:coverage
 ```
+
+### Simple CI/CD
+
+This project has GitHub Actions that automatically run tests when you create Pull Requests or merge code to the main branch.
+
+**How it works:**
+1. Create a branch and make your changes
+2. Create a Pull Request to merge into `main`
+3. GitHub automatically runs tests
+4. If tests fail, you'll get a comment mentioning you with instructions
+5. Fix the issues and push again
+6. Merge the PR when tests pass ✅
 
 ## Docker
 
