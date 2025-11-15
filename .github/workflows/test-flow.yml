@@ -11,11 +11,11 @@ on:
         options:
           - "yes"
           - "no"
-    pull_request_target:
-      branches:
-        - main
-        - develop
-      types: [opened, reopened]
+  pull_request_target:
+    branches:
+      - main
+      - develop
+    types: [opened, reopened]
 
 jobs:
   test:
