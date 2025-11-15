@@ -7,6 +7,12 @@ on:
   workflow_dispatch:
 
 jobs:
+  trigger:
+    name: Trigger Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Waiting for manual run
+        run: echo "Click 'Run workflow' to start tests"
   test:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
