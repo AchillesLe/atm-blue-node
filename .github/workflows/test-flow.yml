@@ -1,25 +1,15 @@
 name: Pre Tests
 
 on:
+  pull_request:
+    branches: [ main, develop ]
+    types: [ opened, reopened, synchronize ]
   workflow_dispatch:
-    inputs:
-      run_test:
-        description: "Run tests?"
-        required: true
-        default: "no"
-        type: choice
-        options:
-          - "yes"
-          - "no"
-  pull_request_target:
-    branches:
-      - main
-      - develop
-    types: [opened, reopened]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
 
     steps:
     - name: Checkout code
