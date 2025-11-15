@@ -1,7 +1,16 @@
 name: Pre Tests
 
 on:
-  workflow_dispatch:
+workflow_dispatch:
+  inputs:
+    run_test:
+      description: "Run tests?"
+      required: true
+      default: "no"
+      type: choice
+      options:
+        - "yes"
+        - "no"
   pull_request_target:
     types: [opened, reopened]
 
