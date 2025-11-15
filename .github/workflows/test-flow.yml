@@ -1,21 +1,21 @@
 name: Pre Tests
 
 on:
-workflow_dispatch:
-  inputs:
-    run_test:
-      description: "Run tests?"
-      required: true
-      default: "no"
-      type: choice
-      options:
-        - "yes"
-        - "no"
-  pull_request_target:
-    branches:
-      - main
-      - develop
-    types: [opened, reopened]
+  workflow_dispatch:
+    inputs:
+      run_test:
+        description: "Run tests?"
+        required: true
+        default: "no"
+        type: choice
+        options:
+          - "yes"
+          - "no"
+    pull_request_target:
+      branches:
+        - main
+        - develop
+      types: [opened, reopened]
 
 jobs:
   test:
