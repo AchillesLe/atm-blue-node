@@ -1,4 +1,4 @@
-name: Pre Tests
+name: Test flow
 
 on:
   pull_request:
@@ -7,13 +7,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  build and test:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup test environment
+    - name: Setup build environment
       run: cp test.env .env
 
     - name: Build Docker image
