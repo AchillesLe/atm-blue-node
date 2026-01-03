@@ -41,7 +41,13 @@ app.get('/', (req, res) => {
     processId: process.pid,
     instanceStartTime: INSTANCE_START_TIME,
     uptime: process.uptime(),
-    isEcsEnvironment: !!ECS_TASK_ID
+    isEcsEnvironment: !!ECS_TASK_ID,
+
+
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    database: process.env.DB_NAME
   });
 });
 
