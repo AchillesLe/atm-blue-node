@@ -46,8 +46,8 @@ if [ ! -f "$TEMPLATE_FILE" ]; then
 fi
 
 FAMILY_NAME="atm-blue-node-task-definition-$ENV"
-EXECUTION_ROLE_ARN="arn:aws:iam::$ACCOUNT_ID:role/ecsTaskExecutionRole"
-TASK_ROLE_ARN="arn:aws:iam::$ACCOUNT_ID:role/ecsTaskRole"
+EXECUTION_ROLE_ARN="arn:aws:iam::$ACCOUNT_ID:role/ecsTaskExecutionRole-atm-blue-node"
+TASK_ROLE_ARN="arn:aws:iam::$ACCOUNT_ID:role/ecsTaskRole-atm-blue-node"
 IMAGE_URI="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/atm-blue-node"
 AWSLOGS_GROUP="/ecs/atm-blue-node-$ENV"
 AWSLOGS_REGION="$REGION"
@@ -69,7 +69,7 @@ TASK_DEFINITION=$(sed \
 echo "$TASK_DEFINITION" > "$OUT_PUT_FILE"
 
 # pushing new task definition file
-aws ecs register-task-definition --cli-input-json file://"$OUT_PUT_FILE" --profile "$AWS_PROFILE"
+aws ecs register-task-definition --cli-input-json file://"$OUT_PUT_FILE" --profile "$AWS_PROFILE" &>/dev/null
 
-# rm "$OUT_PUT_FILE" 2>/dev/null
+rm "$OUT_PUT_FILE" &>/dev/null
 echo "Task definition written to $OUT_PUT_FILE"
