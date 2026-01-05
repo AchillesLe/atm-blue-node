@@ -1,10 +1,11 @@
-FROM node:20-alpine
+FROM node:24-alpine
 
 WORKDIR /app
 
-COPY package*.json yarn.lock* ./
+COPY package.json package-lock.json ./
 
-RUN corepack enable && yarn install --immutable --production && yarn cache clean
+RUN npm ci --omit=dev \
+ && npm cache clean --force
 
 COPY . .
 
