@@ -51,14 +51,15 @@ if [ ! -f "$TEMPLATE_FILE" ]; then
   exit 1
 fi
 
-FAMILY_NAME="atm-blue-node-task-definition-$ENV"
-EXECUTION_ROLE_ARN="arn:aws:iam::$ACCOUNT_ID:role/ecsTaskExecutionRole-atm-blue-node"
-TASK_ROLE_ARN="arn:aws:iam::$ACCOUNT_ID:role/ecsTaskRole-atm-blue-node"
-IMAGE_URI="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/atm-blue-node"
-AWSLOGS_GROUP="/ecs/atm-blue-node-$ENV"
+PROJECT_NAME="atm-blue-node"
+FAMILY_NAME="$PROJECT_NAME-task-definition-$ENV"
+EXECUTION_ROLE_ARN="arn:aws:iam::$ACCOUNT_ID:role/ecsTaskExecutionRole-$PROJECT_NAME"
+TASK_ROLE_ARN="arn:aws:iam::$ACCOUNT_ID:role/ecsTaskRole-$PROJECT_NAME"
+IMAGE_URI="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$PROJECT_NAME"
+AWSLOGS_GROUP="/ecs/$PROJECT_NAME-$ENV"
 AWSLOGS_REGION="$REGION"
 AWSLOGS_STREAM_PREFIX="ecs"
-OUT_PUT_FILE="atm-blue-node-task-definition-$ENV.json"
+OUT_PUT_FILE="$PROJECT_NAME-task-definition-$ENV.json"
 
 ENV_FILE="env/$ENV.env"
 if [ ! -f "$ENV_FILE" ]; then
@@ -83,6 +84,7 @@ done < "$ENV_FILE"
 ENVIRONMENT_JSON="${ENVIRONMENT_JSON%,}]"
 
 TASK_DEFINITION=$(sed \
+  -e "s|\${PROJECT_NAME}|$PROJECT_NAME|g" \
   -e "s|\${ENV}|$ENV|g" \
   -e "s|\${ACCOUNT_ID}|$ACCOUNT_ID|g" \
   -e "s|\${REGION}|$REGION|g" \

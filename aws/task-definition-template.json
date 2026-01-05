@@ -8,7 +8,7 @@
   "taskRoleArn": "${TASK_ROLE_ARN}",
   "containerDefinitions": [
     {
-      "name": "atm-blue-node",
+      "name": "${PROJECT_NAME}",
       "image": "${IMAGE_URI}",
       "portMappings": [
         {
@@ -17,7 +17,28 @@
         }
       ],
       "environment": [],
-      "secrets": [],
+      "secrets": [
+        {
+          "name": "DB_HOST",
+          "valueFrom": "arn:aws:ssm:${REGION}:${ACCOUNT_ID}:parameter/${PROJECT_NAME}/${ENV}/DB_HOST"
+        },
+        {
+          "name": "DB_PORT",
+          "valueFrom": "arn:aws:ssm:${REGION}:${ACCOUNT_ID}:parameter/${PROJECT_NAME}/${ENV}/DB_PORT"
+        },
+        {
+          "name": "DB_USER",
+          "valueFrom": "arn:aws:ssm:${REGION}:${ACCOUNT_ID}:parameter/${PROJECT_NAME}/${ENV}/DB_USER"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn:aws:ssm:${REGION}:${ACCOUNT_ID}:parameter/${PROJECT_NAME}/${ENV}/DB_PASSWORD"
+        },
+        {
+          "name": "DB_NAME",
+          "valueFrom": "arn:aws:ssm:${REGION}:${ACCOUNT_ID}:parameter/${PROJECT_NAME}/${ENV}/DB_NAME"
+        }
+      ],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
