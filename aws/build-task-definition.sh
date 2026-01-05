@@ -1,4 +1,11 @@
-# !/bin/bash
+#!/bin/bash
+
+if ! command -v jq &> /dev/null; then
+  echo "Error: jq is not installed. Please install jq first."
+  echo "On macOS: brew install jq"
+  echo "On Ubuntu/Debian: sudo apt-get install jq"
+  exit 1
+fi
 
 REGION="ap-southeast-1"
 ACCOUNT_ID=""
@@ -53,8 +60,27 @@ AWSLOGS_REGION="$REGION"
 AWSLOGS_STREAM_PREFIX="ecs"
 OUT_PUT_FILE="atm-blue-node-task-definition-$ENV.json"
 
-aws logs create-log-group --log-group-name "$AWSLOGS_GROUP" --region "$REGION" --profile "$AWS_PROFILE" 2>/dev/null
-aws logs put-retention-policy --log-group-name "$AWSLOGS_GROUP" --retention-in-days 7 --region "$REGION" --profile "$AWS_PROFILE" 2>/dev/null
+ENV_FILE="env/$ENV.env"
+if [ ! -f "$ENV_FILE" ]; then
+  echo "Environment file $ENV_FILE not found!"
+  exit 1
+fi
+
+
+ENVIRONMENT_JSON="["
+
+while IFS= read -r line || [ -n "$line" ]; do
+  [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+
+  key="${line%%=*}"
+  value="${line#*=}"
+  value="${value//\\/\\\\}"
+  value="${value//\"/\\\"}"
+
+  ENVIRONMENT_JSON+='{"name":"'"$key"'","value":"'"$value"'"},'
+done < "$ENV_FILE"
+
+ENVIRONMENT_JSON="${ENVIRONMENT_JSON%,}]"
 
 TASK_DEFINITION=$(sed \
   -e "s|\${ENV}|$ENV|g" \
@@ -67,11 +93,11 @@ TASK_DEFINITION=$(sed \
   -e "s|\${AWSLOGS_GROUP}|$AWSLOGS_GROUP|g" \
   -e "s|\${AWSLOGS_REGION}|$AWSLOGS_REGION|g" \
   -e "s|\${AWSLOGS_STREAM_PREFIX}|$AWSLOGS_STREAM_PREFIX|g" \
-  "$TEMPLATE_FILE")
-echo "$TASK_DEFINITION" > "$OUT_PUT_FILE"
+  "$TEMPLATE_FILE" | jq --argjson env "$ENVIRONMENT_JSON" '.containerDefinitions[0].environment = $env')
 
-# pushing new task definition file
+aws logs create-log-group --log-group-name "$AWSLOGS_GROUP" --region "$REGION" --profile "$AWS_PROFILE" 2>/dev/null
+aws logs put-retention-policy --log-group-name "$AWSLOGS_GROUP" --retention-in-days 7 --region "$REGION" --profile "$AWS_PROFILE" 2>/dev/null
 aws ecs register-task-definition --cli-input-json file://"$OUT_PUT_FILE" --profile "$AWS_PROFILE" &>/dev/null
 
 rm "$OUT_PUT_FILE" &>/dev/null
-echo "Task definition written to $OUT_PUT_FILE"
+echo "Done"

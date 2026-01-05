@@ -16,14 +16,7 @@
           "protocol": "tcp"
         }
       ],
-      "environment": [{
-        "name": "APP_ENV",
-        "value": "${ENV}"
-      },
-      {
-        "name": "PORT",
-        "value": "3000"
-      }],
+      "environment": [],
       "secrets": [],
       "logConfiguration": {
         "logDriver": "awslogs",
