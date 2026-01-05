@@ -95,8 +95,11 @@ TASK_DEFINITION=$(sed \
   -e "s|\${AWSLOGS_STREAM_PREFIX}|$AWSLOGS_STREAM_PREFIX|g" \
   "$TEMPLATE_FILE" | jq --argjson env "$ENVIRONMENT_JSON" '.containerDefinitions[0].environment = $env')
 
+echo "$TASK_DEFINITION" > "$OUT_PUT_FILE";
+
 aws logs create-log-group --log-group-name "$AWSLOGS_GROUP" --region "$REGION" --profile "$AWS_PROFILE" 2>/dev/null
 aws logs put-retention-policy --log-group-name "$AWSLOGS_GROUP" --retention-in-days 7 --region "$REGION" --profile "$AWS_PROFILE" 2>/dev/null
+
 aws ecs register-task-definition --cli-input-json file://"$OUT_PUT_FILE" --profile "$AWS_PROFILE" &>/dev/null
 
 rm "$OUT_PUT_FILE" &>/dev/null
