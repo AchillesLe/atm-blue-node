@@ -37,7 +37,6 @@ if [ -z "$ACCOUNT_ID" ]; then
 fi
 echo "Using AWS profile: $AWS_PROFILE";
 
-# load template file
 TEMPLATE_FILE="aws/task-definition-template.json"
 
 if [ ! -f "$TEMPLATE_FILE" ]; then
@@ -53,6 +52,9 @@ AWSLOGS_GROUP="/ecs/atm-blue-node-$ENV"
 AWSLOGS_REGION="$REGION"
 AWSLOGS_STREAM_PREFIX="ecs"
 OUT_PUT_FILE="atm-blue-node-task-definition-$ENV.json"
+
+aws logs create-log-group --log-group-name "$AWSLOGS_GROUP" --region "$REGION" --profile "$AWS_PROFILE" 2>/dev/null
+aws logs put-retention-policy --log-group-name "$AWSLOGS_GROUP" --retention-in-days 7 --region "$REGION" --profile "$AWS_PROFILE" 2>/dev/null
 
 TASK_DEFINITION=$(sed \
   -e "s|\${ENV}|$ENV|g" \
