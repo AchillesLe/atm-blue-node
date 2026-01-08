@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
     database: process.env.DB_NAME,
-    version: '1.0.3',
+    version: '1.0.4',
   });
 });
 
@@ -62,7 +62,7 @@ app.get('/health', (req, res) => {
     ecsTaskId: ECS_TASK_ID,
     hostname: os.hostname(),
     uptime: process.uptime(),
-    version: '1.0.3',
+    version: '1.0.4',
     isEcsEnvironment: !!ECS_TASK_ID
   });
 });
