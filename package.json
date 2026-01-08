@@ -1,6 +1,6 @@
 {
   "name": "atm-blue-node",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple Node.js API with health check and home endpoints",
   "main": "src/app.js",
   "scripts": {
