@@ -48,9 +48,28 @@ aws ecr get-login-password --region $REGION \
   --username AWS \
   --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
 
+
+LATEST_TAG=$(aws ecr describe-images \
+  --repository-name $ECR_REPO \
+  --region $REGION \
+  --query 'imageDetails[].imageTags[]' \
+  --output text 2>/dev/null \
+| tr '\t' '\n' \
+| grep -E '^[0-9]+$' \
+| sort -n \
+| tail -1)
+
+if [ -z "$LATEST_TAG" ]; then
+  NEW_TAG=1
+else
+  NEW_TAG=$((LATEST_TAG + 1))
+fi
+
+echo "New tag: $NEW_TAG"
+
 echo "Pushing to ECR..."
-docker tag atm-blue-node:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+docker tag atm-blue-node:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$NEW_TAG
 
-docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$NEW_TAG
 
-echo "Done: $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG"
+echo "Done: Image Tag: $NEW_TAG"

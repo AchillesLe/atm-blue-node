@@ -11,6 +11,7 @@ REGION="ap-southeast-1"
 ACCOUNT_ID=""
 AWS_PROFILE=""
 ENV="dev"
+IMAGE_TAG=1
 
 for ARG in "$@"; do
   case $ARG in
@@ -20,6 +21,10 @@ for ARG in "$@"; do
       ;;
     --profile=*)
       AWS_PROFILE="${ARG#*=}"
+      shift
+      ;;
+    --image-tag=*)
+      IMAGE_TAG="${ARG#*=}"
       shift
       ;;
     *)
@@ -55,7 +60,7 @@ PROJECT_NAME="atm-blue-node"
 FAMILY_NAME="$PROJECT_NAME-task-definition-$ENV"
 EXECUTION_ROLE_ARN="arn:aws:iam::$ACCOUNT_ID:role/ecsTaskExecutionRole-$PROJECT_NAME"
 TASK_ROLE_ARN="arn:aws:iam::$ACCOUNT_ID:role/ecsTaskRole-$PROJECT_NAME"
-IMAGE_URI="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$PROJECT_NAME"
+IMAGE_URI="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$PROJECT_NAME:$IMAGE_TAG"
 AWSLOGS_GROUP="/ecs/$PROJECT_NAME-$ENV"
 AWSLOGS_REGION="$REGION"
 AWSLOGS_STREAM_PREFIX="ecs"
@@ -105,4 +110,4 @@ aws logs put-retention-policy --log-group-name "$AWSLOGS_GROUP" --retention-in-d
 aws ecs register-task-definition --cli-input-json file://"$OUT_PUT_FILE" --profile "$AWS_PROFILE" &>/dev/null
 
 rm "$OUT_PUT_FILE" &>/dev/null
-echo "Done"
+echo "Done building and registering task definition."
