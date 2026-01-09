@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const os = require('os');
 const axios = require('axios');
+const { getUserCount } = require('./services/userService');
 
 dotenv.config();
 
@@ -29,7 +30,8 @@ const INSTANCE_START_TIME = new Date().toISOString();
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
+  const userCount = await getUserCount();
   res.json({
     message: `Hello from ${APP_ENV} environment!`,
     timestamp: new Date().toISOString(),
@@ -42,8 +44,7 @@ app.get('/', (req, res) => {
     instanceStartTime: INSTANCE_START_TIME,
     uptime: process.uptime(),
     isEcsEnvironment: !!ECS_TASK_ID,
-
-
+    userCount,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,

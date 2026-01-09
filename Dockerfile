@@ -2,10 +2,9 @@ FROM node:24-alpine
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY package.json package-lock*.json ./
 
-RUN npm ci --omit=dev \
- && npm cache clean --force
+RUN npm install
 
 COPY . .
 
