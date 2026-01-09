@@ -2,7 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const os = require('os');
 const axios = require('axios');
-const { getUserCount } = require('./services/userService');
+const { getUserCount, createUser } = require('./services/userService');
 
 dotenv.config();
 
@@ -57,15 +57,42 @@ app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
     message: 'Service is healthy',
-    timestamp: new Date().toISOString(),
-    environment: APP_ENV,
-    taskId: ECS_TASK_ID || TASK_ID,
-    ecsTaskId: ECS_TASK_ID,
-    hostname: os.hostname(),
-    uptime: process.uptime(),
-    version: '1.0.4',
-    isEcsEnvironment: !!ECS_TASK_ID
   });
+});
+
+app.post('/users', async (req, res) => {
+  try {
+    const { username, email, fullName } = req.body;
+
+    if (!username || !email) {
+      return res.status(400).json({
+        status: 'ERROR',
+        message: 'Username and email are required'
+      });
+    }
+
+    const newUser = await createUser(username, email, fullName);
+    res.status(201).json({
+      status: 'OK',
+      message: 'User created successfully',
+      user: newUser
+    });
+  } catch (error) {
+    console.error('Error creating user:', error);
+
+    if (error.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({
+        status: 'ERROR',
+        message: 'Username or email already exists'
+      });
+    }
+
+    res.status(500).json({
+      status: 'ERROR',
+      message: 'Failed to create user',
+      error: error.message
+    });
+  }
 });
 
 app.use((err, req, res, next) => {

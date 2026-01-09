@@ -22,6 +22,25 @@ async function getUserCount() {
   }
 }
 
+async function createUser(username, email, fullName) {
+  try {
+    const [result] = await pool.query(
+      'INSERT INTO users (username, email, full_name) VALUES (?, ?, ?)',
+      [username, email, fullName]
+    );
+    return {
+      id: result.insertId,
+      username,
+      email,
+      fullName
+    };
+  } catch (error) {
+    console.error('Database error in createUser:', error);
+    throw error;
+  }
+}
+
 module.exports = {
-  getUserCount
+  getUserCount,
+  createUser
 };
