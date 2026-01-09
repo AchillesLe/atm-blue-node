@@ -1,6 +1,6 @@
 const mysql = require('mysql2/promise');
 
-const pool = mysql.createPool({
+const config = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   port: process.env.DB_PORT,
@@ -9,7 +9,8 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
-});
+}
+const pool = mysql.createPool(config);
 
 async function getUserCount() {
   try {
