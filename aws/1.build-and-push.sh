@@ -37,10 +37,6 @@ fi
 
 ECR_REPO="atm-blue-node"
 IMAGE_URI="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO"
-IMAGE_TAG="latest"
-
-echo "Building for linux/amd64..."
-docker build --platform linux/amd64 -t $ECR_REPO .
 
 echo "Login to ECR..."
 aws ecr get-login-password --region $REGION \
@@ -65,11 +61,12 @@ else
   NEW_TAG=$((LATEST_TAG + 1))
 fi
 
-echo "New tag: $NEW_TAG"
+FULL_IMAGE_TAG=$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$NEW_TAG
+echo "Building for linux/amd64..."
+docker build --platform linux/amd64 -t $ECR_REPO:latest .
 
 echo "Pushing to ECR..."
-docker tag $ECR_REPO:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$NEW_TAG
+docker push $FULL_IMAGE_TAG
 
-docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$NEW_TAG
-
-echo "Done: Image Tag: $NEW_TAG"
+echo "Done: Image Tag"
+echo $NEW_TAG
