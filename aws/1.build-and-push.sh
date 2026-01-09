@@ -68,7 +68,7 @@ fi
 echo "New tag: $NEW_TAG"
 
 echo "Pushing to ECR..."
-docker tag atm-blue-node:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$NEW_TAG
+docker tag $ECR_REPO:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$NEW_TAG
 
 docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$NEW_TAG
 
