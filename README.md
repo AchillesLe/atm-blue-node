@@ -16,6 +16,12 @@ aws ssm put-parameter \
   --overwrite &> /dev/null
 
 aws ssm put-parameter \
+  --name "/atm-blue-node/dev/DB_USER" \
+  --value "DB_USER" \
+  --type "String" \
+  --overwrite &> /dev/null
+
+aws ssm put-parameter \
   --name "/atm-blue-node/dev/DB_PASSWORD" \
   --value "DB_PASSWORD" \
   --type "String" \
@@ -29,5 +35,5 @@ aws ssm put-parameter \
 ```
 
 ### Run
-- Read Makefile
 
+- Read Makefile
