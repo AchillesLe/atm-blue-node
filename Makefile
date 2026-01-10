@@ -20,3 +20,10 @@ build-ecr-and-task-dev:
 	@NEW_TAG=$$(./aws/1.build-and-push.sh --env=dev | tail -1); \
 	echo "Using image tag: $$NEW_TAG"; \
 	./aws/2.build-and-push-task-definition.sh --env=dev --image-tag=$$NEW_TAG
+
+.PHONY: build-ecr-and-task-prod
+build-ecr-and-task-prod:
+	@echo "Building and pushing ECR image..."
+	@NEW_TAG=$$(./aws/1.build-and-push.sh --env=prod | tail -1); \
+	echo "Using image tag: $$NEW_TAG"; \
+	./aws/2.build-and-push-task-definition.sh --env=prod --image-tag=$$NEW_TAG
