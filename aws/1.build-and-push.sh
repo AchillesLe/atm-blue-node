@@ -66,6 +66,7 @@ echo "Building for linux/amd64..."
 docker build --platform linux/amd64 -t $ECR_REPO:latest .
 
 echo "Pushing to ECR..."
+docker tag $ECR_REPO:latest $FULL_IMAGE_TAG
 docker push $FULL_IMAGE_TAG
 
 echo "Done: Image Tag"

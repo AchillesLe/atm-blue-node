@@ -37,6 +37,7 @@ if [ "$ENV" != "dev" ] && [ "$ENV" != "prod" ]; then
   exit 1
 fi
 echo "Building task definition for environment: $ENV";
+echo "Building image tag $IMAGE_TAG";
 
 AWS_ACCOUNT_ID=$(aws sts get-caller-identity --profile "$AWS_PROFILE" --query Account --output text)
 if [ -n "$AWS_ACCOUNT_ID" ]; then
