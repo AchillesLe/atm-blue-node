@@ -61,7 +61,6 @@ coverage/
 .dockerignore
 
 # IDE
-.vscode/
 .idea/
 *.swp
 *.swo

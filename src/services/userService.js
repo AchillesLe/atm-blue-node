@@ -1,23 +1,11 @@
-const mysql = require('mysql2/promise');
-
-const config = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  port: process.env.DB_PORT,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-}
-const pool = mysql.createPool(config);
+const db = require('../config/database');
 
 async function getUserCount() {
   try {
-    const [rows] = await pool.query('SELECT COUNT(*) as count FROM users');
-    return rows[0].count;
+    const result = await db('users').count('* as count').first();
+    return result.count;
   } catch (error) {
-    console.log({error});
+    console.log({ error });
     console.error('Database error in getUserCount:', error);
     return null;
   }
@@ -25,15 +13,16 @@ async function getUserCount() {
 
 async function createUser(username, email, fullName) {
   try {
-    const [result] = await pool.query(
-      'INSERT INTO users (username, email, full_name) VALUES (?, ?, ?)',
-      [username, email, fullName]
-    );
-    return {
-      id: result.insertId,
+    const [id] = await db('users').insert({
       username,
       email,
-      fullName
+      full_name: fullName,
+    });
+    return {
+      id,
+      username,
+      email,
+      fullName,
     };
   } catch (error) {
     console.error('Database error in createUser:', error);
@@ -43,5 +32,5 @@ async function createUser(username, email, fullName) {
 
 module.exports = {
   getUserCount,
-  createUser
+  createUser,
 };

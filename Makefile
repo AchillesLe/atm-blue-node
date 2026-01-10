@@ -2,6 +2,14 @@
 up:
 	docker compose up -d --build
 
+.PHONY: down
+down:
+	docker compose down
+
+.PHONY: migrate
+migrate:
+	docker compose exec app sh -c  "npm run migrate"
+
 .PHONY: build-ecr-and-task-dev
 build-ecr-and-task-dev:
 	@echo "Building and pushing ECR image..."
