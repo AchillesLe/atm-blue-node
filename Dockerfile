@@ -1,8 +1,12 @@
 FROM node:24-alpine
 
+# install bash
+RUN apk add --no-cache bash
+
+ENV NPM_CONFIG_UPDATE_NOTIFIER=false
+
 WORKDIR /app
 
-# 3. Copy dependency files first
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
@@ -15,6 +19,8 @@ COPY --chown=atm-blue:atm-blue-g . .
 
 USER atm-blue
 
+RUN chmod +x src/start.sh
+
 EXPOSE 3000
 
-CMD ["node", "src/app.js"]
+CMD ["src/start.sh"]
