@@ -1,7 +1,13 @@
 #!/bin/bash
+set -e
 
 echo "Waiting for the database to be ready..."
-node src/wait-for-db.js || exit 1
-npx npm run migrate
+if node src/wait-for-db.js; then
+  echo "Database ready. Running migrations..."
+  npm run migrate
+else
+  echo "Database not ready. Skipping migrations."
+fi
+
 echo "======== Starting the application ========"
-npx npm start
+exec npm start

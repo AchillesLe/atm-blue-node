@@ -2,7 +2,7 @@
 
 REGION="ap-southeast-1"
 ACCOUNT_ID=""
-AWS_PROFILE=""
+AWS_PROFILE="default"
 ENV="dev"
 
 for ARG in "$@"; do
